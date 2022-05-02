@@ -1,83 +1,91 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
+  <v-container
+    :style="$vuetify.breakpoint.xl ? 'padding: 0 15%' : ''"
+  >
+    <v-row>
+      <v-col
+        cols="12"
+        md="6"
+        sm="12"
+        :class="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? 'd-flex flex-column justify-center align-center' : 'd-flex flex-column justify-center'"
+      >
+        <h1
+          :class="$vuetify.breakpoint.xs ? 'text-h3 font-weight-medium' : 'text-h1 font-weight-medium'"
+        >
+          Wow
+        </h1>
+
+        <h2
+          :class="$vuetify.breakpoint.xs ? 'text-h4 font-body-2' : 'text-h2 font-body-2'"
+        >
+          Very error, Much 404
+        </h2>
+
+        <div
+          :class="$vuetify.breakpoint.xs ? 'text-center mt-16' : 'mt-16'"
+        >
           <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
+            The page you are looking for dosen't exists.
+            
+            <br>
+            
+            it seems you have taken a wrong turn.
           </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
+        </div>
+
+        <div
+          :class="$vuetify.breakpoint.xs ? 'mb-5 mt-5' : 'mt-5'"
+        >
           <v-btn
+            dark
+            x-large
+            elevation="0"
             color="primary"
-            nuxt
-            to="/inspire"
+            class="px-12"
+            to="/search"
           >
-            Continue
+            Buscar sede
           </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+        </div>
+      </v-col>
+
+      <v-col
+        cols="12"
+        md="6"
+        sm="12"
+        class="d-flex flex-column justify-center"
+        :order="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? '1' : '2'"
+      >
+        <v-img
+          src=""
+          height="auto"
+          max-height="400"
+          contain
+        ></v-img>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
+
+<style lang="scss" scoped>
+.container,
+.row {
+  height: 100%;
+}
+</style>
 
 <script>
 export default {
-  name: 'IndexPage'
-}
+  head() {
+    return {
+      title: "Inicio",
+    };
+  },
+  data: () => ({
+    
+  }),
+  methods: {
+    
+  }
+};
 </script>

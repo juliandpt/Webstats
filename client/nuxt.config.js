@@ -6,7 +6,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - webstats',
+    titleTemplate: '%s | Webstats',
     title: 'webstats',
     htmlAttrs: {
       lang: 'en'
@@ -57,10 +57,19 @@ export default {
     theme: {
       dark: true,
       themes: {
-        dark: {
-          primary: colors.blue.darken2,
+        light: {
+          primary: colors.green.base,
+          secondary: colors.grey.base,
           accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.red.accent2,
+          success: colors.green.accent3
+        },
+        dark: {
+          primary: colors.green.base,
+          accent: colors.grey.darken3,
+          secondary: colors.grey.base,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
