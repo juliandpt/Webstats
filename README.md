@@ -9,9 +9,7 @@
 
 *Nuxt installation:*
 
-```sh
-npm init nuxt-app <project-name>
-```
+during the installation of [NodeJS](https://nodejs.org)
 
 *Vuetify installation:*
 
@@ -137,13 +135,7 @@ npm init --yes
 ```
 *2. Create the different files and directories of the project*
 
-*3. Create `.env` file and add the following environment variables:*
-
-```.env
-PORT=8080
-DATABASE_URL=postgres://ovrkgbvvuyafcj:11b8210583fa658f4bc07d44ad5acd6bd9407299bdc55c8651dce70741696b45@ec2-99-80-170-190.eu-west-1.compute.amazonaws.com:5432/d59n4a1tuqvqk8
-SENDGRID_API_KEY=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
-```
+*3. Create `.env` file with the necessary environment variables:*
 
 *4. Add the next line on package.json file:*
 ```tree
@@ -171,6 +163,6 @@ npm run dev
 - [SengridMail](https://www.npmjs.com/package/@sendgrid/mail) - allows you to send emails to a user
 - [Colors](https://www.npmjs.com/package/colors) - allows you to set a console output with the desired color.
 
-## Authors ✒️
+## Author ✒️
 
 Julián de Pablo - [@juliandpt](https://www.github.com/juliandpt) - [juliandepablo.com](https://juliandepablo.com/)
