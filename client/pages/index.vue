@@ -10,26 +10,16 @@
         :class="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? 'd-flex flex-column justify-center align-center' : 'd-flex flex-column justify-center'"
       >
         <h1
-          :class="$vuetify.breakpoint.xs ? 'text-h3 font-weight-medium' : 'text-h1 font-weight-medium'"
+          :class="$vuetify.breakpoint.xs ? 'text-h3 font-weight-medium' : 'text-h2 font-weight-medium'"
         >
-          Wow
+          Webstats. La herramienta de análisis de dominios
         </h1>
 
-        <h2
-          :class="$vuetify.breakpoint.xs ? 'text-h4 font-body-2' : 'text-h2 font-body-2'"
-        >
-          Very error, Much 404
-        </h2>
-
         <div
-          :class="$vuetify.breakpoint.xs ? 'text-center mt-16' : 'mt-16'"
+          :class="$vuetify.breakpoint.xs ? 'text-center mt-8' : 'mt-8'"
         >
           <p>
-            The page you are looking for dosen't exists.
-            
-            <br>
-            
-            it seems you have taken a wrong turn.
+            Descubra la herramienta de dominios más sofisticada y fácil de usar del mundo
           </p>
         </div>
 
@@ -44,7 +34,14 @@
             class="px-12"
             to="/search"
           >
-            Buscar sede
+            Analizar dominio
+
+            <img
+              src="/icons/arrow-right.svg"
+              height="22"
+              width="22"
+              class="mr-n1 ml-2"
+            >
           </v-btn>
         </div>
       </v-col>

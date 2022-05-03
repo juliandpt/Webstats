@@ -8,7 +8,6 @@ sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 router.post('/sendEmail', async (req, res) => {
   console.log('POST /sendEmail'.italic.yellow)
-  console.log(req.body.email)
 
   const message = {
     to: 'jdptdev@gmail.com',

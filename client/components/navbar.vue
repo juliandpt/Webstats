@@ -37,7 +37,6 @@
 
           <v-toolbar-title
             class="pa-0 d-flex align-center"
-
           >
             <div 
               class="mr-2"

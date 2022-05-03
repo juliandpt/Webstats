@@ -18,18 +18,18 @@
         <h2
           :class="$vuetify.breakpoint.xs ? 'text-h4 font-body-2' : 'text-h2 font-body-2'"
         >
-          Very error, Much 404
+          Muy error, Mucho 404
         </h2>
 
         <div
           :class="$vuetify.breakpoint.xs ? 'text-center mt-16' : 'mt-16'"
         >
           <p>
-            The page you are looking for dosen't exists.
+            La pagina que buscas no existe.
             
             <br>
             
-            it seems you have taken a wrong turn.
+            parece que has tomado un camino equivocado.
           </p>
         </div>
 
@@ -44,7 +44,7 @@
             class="px-12"
             to="/"
           >
-            Go home
+            Ir a inicio
           </v-btn>
         </div>
       </v-col>

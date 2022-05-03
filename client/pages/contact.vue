@@ -22,22 +22,23 @@
       class="mt-8 mb-8 d-flex flex-column justify-center"
     >
       <v-col
-        class="d-flex flex-row alig-center justify-center"
+        class="d-flex flex-row align-center justify-center"
       >
         <v-card
           flat
           elevation="0"
-          class="mx-2 text-center"
+          class="mx-2 d-flex flex-column align-center justify-center text-center"
           v-for="(card, i) in cards"
           :key="i"
           :width="$vuetify.breakpoint.xs ? '100%' : '12rem'"
         >
-          <img
-            :src="card.icon"
+          <v-img
+            contain
             class="mx-3 mt-3"
             height="30"
             width="30"
-          >
+            :src="card.icon"
+          ></v-img>
 
           <v-card-text
             ref="textToCopy"
@@ -308,13 +309,13 @@ export default {
         .then((response) => {
           this.error = false
           this.$refs.form.reset()
-          this.text = 'Email sent Successfuly!'
+          this.text = 'Email enviado correctamente!'
           this.loading = false
           this.snackbarShow = true
         })
         .catch((error) => {
           this.error = true
-          this.text = 'An error ocurred'
+          this.text = 'Algo salio mal...'
           this.loading = false
           this.snackbarShow = true
         })
