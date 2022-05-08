@@ -16,7 +16,7 @@
 export default {
   head() {
     return {
-      title: "Global",
+      title: "Estadísticas",
     };
   },
   data: () => ({

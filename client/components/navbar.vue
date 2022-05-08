@@ -199,10 +199,10 @@ export default({
         link: "/search"
       },
       {
-        title: 'Global',
+        title: 'Estadísticas',
         icon: "/icons/chart.svg",
         icon_grey: "/icons/chart-grey.svg",
-        link: "/global"
+        link: "/stats"
       },
       {
         title: 'Contacto',

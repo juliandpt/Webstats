@@ -19,7 +19,7 @@
     </v-row>
 
     <v-row
-      class="mt-8 mb-8 d-flex flex-column justify-center"
+      class="mt-8 d-flex flex-column justify-center"
     >
       <v-col
         class="d-flex flex-row align-center justify-center"
@@ -298,14 +298,13 @@ export default {
     sendEmail: function () {
       this.loading = true
 
-      let url = 'http://127.0.0.1:8080/contact/sendEmail'
       let messageParams = {
         name: this.name,
         email: this.email,
         message: this.message
       }
 
-      axios.post(url, messageParams)
+      this.$axios.post('/contact/sendEmail', messageParams)
         .then((response) => {
           this.error = false
           this.$refs.form.reset()

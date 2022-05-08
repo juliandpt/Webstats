@@ -22,15 +22,14 @@ router.post('/sendEmail', async (req, res) => {
   };
 
   await sendgridMail.send(message)
-    .then(() => {
+    .then((response) => {
       console.log('Email sent succesfully!'.green)
       return res.status(200).send({
         status: "ok"
       })
     })
     .catch((error) => {
-      console.error('Error sending email'.red)
-      console.error(error)
+      console.error('Error sending email: \n%s'.red, error)
       return res.status(500).send({
         status: error
       })

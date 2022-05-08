@@ -1,6 +1,6 @@
 <template>
   <v-container
-    :style="$vuetify.breakpoint.xl ? 'padding: 0 15%' : ''"
+    :style="$vuetify.breakpoint.lg ? 'padding: 0 15%' : ''"
   >
     <v-row
       align="center"
@@ -11,6 +11,7 @@
         filled
         solo
         clearable
+        hint="https://www.example.com"
         label="Buscar"
         placeholder="Buscar"
       >
@@ -31,6 +32,13 @@
         </template>
       </v-text-field>
     </v-row>
+
+    <v-row
+      align="center"
+      justify="center"
+    >
+      {{suggestions}}
+    </v-row>
   </v-container>
 </template>
 
@@ -49,10 +57,28 @@ export default {
     };
   },
   data: () => ({
-    
+    loading: false,
+    suggestions: []
   }),
+  mounted() {
+    this.$axios.get('/stats/recent')
+      .then((response) => {
+        this.suggestions = response
+        console.log(response)
+      })
+      .catch((error) => {
+      })
+  },
   methods: {
-    
+    getDomainInfo: function () {
+      this.$axios.get('/stats/recent', )
+      .then((response) => {
+        this.suggestions = response
+        console.log(response)
+      })
+      .catch((error) => {
+      })
+    }
   }
 };
 </script>

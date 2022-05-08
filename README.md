@@ -98,6 +98,12 @@ npm install express
 npm install nodemon
 ```
 
+*Colors:*
+
+```sh
+npm install colors
+```
+
 *Cors:*
 
 ```sh
@@ -109,10 +115,10 @@ npm install cors
 npm install dotenv
 ```
 
-*Pg:*
+*Mongoose:*
 
 ```sh
-npm install pg
+npm install mongoose
 ```
 
 *Sengrid mail:*
@@ -121,10 +127,10 @@ npm install pg
 npm install @sendgrid/mail
 ```
 
-*Colors:*
+*Website logo:*
 
 ```sh
-npm install colors
+npm install website-logo
 ```
 
 ### Environment configuration ⚙️
@@ -148,20 +154,23 @@ npm init --yes
 ### Deployment 📦
 
 *Activate server:*
+
 ```sh
 npm run dev
 ```
 
 ### Built with 🛠️
 
-- [node.js](https://nodejs.org/en/) - server of the project.
-- [Express](https://www.npmjs.com/package/express) - provides a set of features for web and mobile applications
-- [Cors](https://www.npmjs.com/package/cors) - provides Connect/Express middleware that can be used to enable CORS with various options
-- [Nodemon](https://www.npmjs.com/package/nodemon/v/1.18.10) - automatically restarts the node application when file changes are detected in the directory
-- [Dotenv](https://www.npmjs.com/package/dotenv) - allows to access the environment variables of the .env file
-- [Pg](https://www.npmjs.com/package/mariadb) - allows to establish the connection to the Postgresql-Heroku database
-- [SengridMail](https://www.npmjs.com/package/@sendgrid/mail) - allows you to send emails to a user
-- [Colors](https://www.npmjs.com/package/colors) - allows you to set a console output with the desired color.
+- [Node.js](https://nodejs.org/en/) - server of the project.
+- [Express](https://www.npmjs.com/package/express) - provides a set of features for web and mobile applications.
+- [Cors](https://www.npmjs.com/package/cors) - provides Connect/Express middleware that can be used to enable CORS with various options.
+- [Nodemon](https://www.npmjs.com/package/nodemon/v/1.18.10) - automatically restarts the node application when file changes are detected in the directory.
+- [Colors](https://www.npmjs.com/package/colors) - allows to set a console output with the desired color.
+- [Dotenv](https://www.npmjs.com/package/dotenv) - allows to access the environment variables of the .env file.
+- [Mongoose](https://www.npmjs.com/package/mongoose) - allows to establish the connection to the MongoDB database.
+- [SengridMail](https://www.npmjs.com/package/@sendgrid/mail) - allows to send emails to a user.
+- [Node-ssllabs](https://www.npmjs.com/package/node-ssllabs) - allows to interact with the [SSL Labs API](https://www.ssllabs.com/projects/ssllabs-apis/).
+- [WebsiteLogo](https://www.npmjs.com/package/website-logo) - allows to extract de logo from a web domain.
 
 ## Author ✒️
 

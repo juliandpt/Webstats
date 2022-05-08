@@ -1,11 +1,7 @@
-const { Pool } = require('pg')
+const mongoose = require('mongoose')
 require('dotenv').config()
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
-})
-
-module.exports = pool
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then((db) => console.log("MongoDB is connected to:", db.connection.host))
+  .catch((error) => console.error(error))
