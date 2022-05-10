@@ -127,10 +127,28 @@ npm install mongoose
 npm install @sendgrid/mail
 ```
 
+*Node-ssllabs:*
+
+```sh
+npm install node-ssllabs
+```
+
 *Website logo:*
 
 ```sh
 npm install website-logo
+```
+
+*Sha256:*
+
+```sh
+npm install sha256
+```
+
+*Jsonwebtoken:*
+
+```sh
+npm install jsonwebtoken
 ```
 
 ### Environment configuration ⚙️
@@ -171,6 +189,8 @@ npm run dev
 - [SengridMail](https://www.npmjs.com/package/@sendgrid/mail) - allows to send emails to a user.
 - [Node-ssllabs](https://www.npmjs.com/package/node-ssllabs) - allows to interact with the [SSL Labs API](https://www.ssllabs.com/projects/ssllabs-apis/).
 - [WebsiteLogo](https://www.npmjs.com/package/website-logo) - allows to extract de logo from a web domain.
+- [Sha256](https://www.npmjs.com/package/sha256) - provides the text encryption algorithm.
+- [Jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - provides the tools to create user tokens.
 
 ## Author ✒️
 

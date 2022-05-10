@@ -1,6 +1,6 @@
 <template>
   <v-container
-    :style="$vuetify.breakpoint.lg ? 'padding: 0 15%' : ''"
+    :style="$vuetify.breakpoint.xl ? 'padding: 0 15%' : ''"
   >
     <v-row
       align="center"
@@ -33,11 +33,69 @@
       </v-text-field>
     </v-row>
 
-    <v-row
-      align="center"
-      justify="center"
-    >
-      {{suggestions}}
+    <v-row>
+      <v-col
+        xs="12"
+        sm="6"
+        md="6"
+        lg="4"
+        xl="4"
+        class="pb-0"
+        v-for="(item, i) in suggestions"
+        :key="i"
+      >
+        <v-card>
+          <div 
+            class="d-flex"
+          >
+            <v-avatar
+              class="ma-3"
+              size="100"
+              tile
+            >
+              <v-img :src="item.logo"></v-img>
+            </v-avatar>
+
+            <div>
+
+              <v-card-text>
+                <p class="font-weight-bold">Nombre pagina</p>
+                {{ convertDomain(item.host) }}
+              </v-card-text>
+              <v-card-actions style="position: absolute; bottom: 0; right: 0">
+                <v-btn
+                  icon
+                  right
+                  color="grey"
+                  @click="getDomainInfo(item.host)"
+                >
+                  <v-img
+                    src="/icons/link.svg"
+                    height="25"
+                    width="25"
+                  >
+                  </v-img>
+                </v-btn>
+              </v-card-actions>
+            </div>
+          </div>
+        </v-card>
+
+        <div
+          class="ma-2 d-flex flex-row align-center"
+        >
+          <v-spacer></v-spacer>
+
+          <img
+            src="/icons/eye.svg"
+            height="20"
+            width="20"
+            class="mx-1"
+          >
+
+          {{ item.timesSearched }}
+        </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -61,23 +119,27 @@ export default {
     suggestions: []
   }),
   mounted() {
-    this.$axios.get('/stats/recent')
+    this.$axios.get('/domain/recents')
       .then((response) => {
-        this.suggestions = response
+        this.suggestions = response.data.results
         console.log(response)
       })
       .catch((error) => {
       })
   },
   methods: {
-    getDomainInfo: function () {
-      this.$axios.get('/stats/recent', )
+    getDomainInfo: function (domain) {
+      this.$axios.get('/domain/search', )
       .then((response) => {
         this.suggestions = response
-        console.log(response)
       })
       .catch((error) => {
       })
+    },
+    convertDomain: function (url) {
+      let res = new URL(url)
+
+      return res.hostname
     }
   }
 };

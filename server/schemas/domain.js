@@ -1,11 +1,15 @@
 const { Schema, model } = require('mongoose')
 
 const domainSchema = new Schema({
-    date: {
+    lastUpdated: {
       type: Date,
       required: true
     },
-    numSearches: {
+    lastSearched: {
+      type: Date,
+      required: true
+    },
+    timesSearched: {
       type: Number,
       required: true
     },

@@ -53,12 +53,7 @@
         class="d-flex flex-column justify-center"
         :order="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? '1' : '2'"
       >
-        <v-img
-          src=""
-          height="auto"
-          max-height="400"
-          contain
-        ></v-img>
+        <apexchart type="radialBar" :series="chartData" :options="chartOptions"></apexchart>
       </v-col>
     </v-row>
   </v-container>
@@ -78,11 +73,31 @@ export default {
       title: "Inicio",
     };
   },
-  data: () => ({
-    
-  }),
+  data () {
+    return {
+      chartData: [10, 20, 30, 40, 50],
+      chartOptions: {
+        chart: {
+          name: "RadialBar",
+        }
+      },
+      interval: null
+    }
+  },
+  created() {
+    this.interval = this.setInterval()
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
+  },
   methods: {
-    
+    setInterval() {
+      setInterval(() => {
+        for(let i = 0; i < this.chartData.length; i++) {
+          this.$set(this.chartData, i, parseFloat((Math.random() * 100).toFixed(2)))
+        }
+      }, 2000)
+    }
   }
 };
 </script>

@@ -199,12 +199,6 @@ export default({
         link: "/search"
       },
       {
-        title: 'Estadísticas',
-        icon: "/icons/chart.svg",
-        icon_grey: "/icons/chart-grey.svg",
-        link: "/stats"
-      },
-      {
         title: 'Contacto',
         icon: "/icons/mail.svg",
         icon_grey: "/icons/mail-grey.svg",

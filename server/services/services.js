@@ -1,22 +1,15 @@
 
-const websiteLogo = require( 'website-logo' )
-const Domain = require('../database/schemas')
-const timestamp = new Date();
+const websiteLogo = require('website-logo')
+const sha256 = require('sha256')
+const jwt = require('jsonwebtoken')
 require('../database/keys')
 
-async function domainStatus(dom) {
-  var result = await Domain.find({ host: dom }, 'date');
-
-  if (result[0] === undefined) return 'isNew'
-
-  else if (result[0].date > timestamp.setDate(timestamp.getDate() - 7)) return 'isOld'
-
-  else return 'isOk'
-}
+const timestamp = new Date();
+const timestampAdd = new Date(timestamp.getDate() + 1)
 
 async function getDomainLogo(url) {
   let logo
-  
+
   return new Promise((resolve, reject) => {
     websiteLogo(url, function (error, result) {
       if (error) reject('Logo not generated: \n%s'.red, error)
@@ -30,13 +23,33 @@ async function getDomainLogo(url) {
         resolve(logo)
       }
       else {
-        console.log("bad")
+        reject('Logo not generated: \n%s'.red, error)
       }
     })
   })
 }
 
+function createToken(admin) {
+  var payload = {
+    sub: admin,
+    iat: timestamp.getTime(),
+    exp: timestampAdd.getTime()
+  }
+
+  return jwt.sign(payload, process.env.SECRET_TOKEN)
+}
+
+function decodeToken(token, secret) {
+  return jwt.verify(token, secret)
+}
+
+function encryptPassword(password) {
+  return sha256(password)
+}
+
 module.exports = {
-  domainStatus,
-  getDomainLogo
+  getDomainLogo,
+  createToken,
+  decodeToken,
+  encryptPassword
 }
