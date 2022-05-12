@@ -10,7 +10,7 @@
         :class="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? 'd-flex flex-column justify-center align-center' : 'd-flex flex-column justify-center'"
       >
         <h1
-          :class="$vuetify.breakpoint.xs ? 'text-h3 font-weight-medium' : 'text-h2 font-weight-medium'"
+          :class="$vuetify.breakpoint.xs ? 'text-center text-h3 font-weight-medium' : 'text-h2 font-weight-medium'"
         >
           Webstats. La herramienta de análisis de dominios
         </h1>
@@ -53,7 +53,12 @@
         class="d-flex flex-column justify-center"
         :order="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? '1' : '2'"
       >
-        <apexchart type="radialBar" :series="chartData" :options="chartOptions"></apexchart>
+        <!-- <apexchart
+          type="radialBar"
+          :series="data.chartData"
+          :options="data.chartOptions"
+        ></apexchart> -->
+        <v-chart :option="chartOptions" />
       </v-col>
     </v-row>
   </v-container>
@@ -75,11 +80,79 @@ export default {
   },
   data () {
     return {
-      chartData: [10, 20, 30, 40, 50],
       chartOptions: {
-        chart: {
-          name: "RadialBar",
-        }
+        series: [
+          {
+            type: 'gauge',
+            startAngle: 90,
+            endAngle: -270,
+            pointer: {
+              show: false
+            },
+            progress: {
+              show: true,
+              overlap: false,
+              roundCap: true,
+              clip: false,
+              itemStyle: {
+                borderWidth: 1,
+                borderColor: '#464646'
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                width: 40
+              }
+            },
+            splitLine: {
+              show: false,
+              distance: 0,
+              length: 10
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false,
+              distance: 50
+            },
+            data: [
+              {
+                value: 10,
+                detail: {
+                  show: false
+                }
+              },
+              {
+                value: 20,
+                detail: {
+                  show: false
+                }
+              },
+              {
+                value: 30,
+                detail: {
+                  show: false
+                }
+              },
+              {
+                value: 40,
+                detail: {
+                  show: false
+                }
+              },
+              {
+                value: 50,
+                detail: {
+                  show: false
+                }
+              },
+            ],
+            title: {
+              fontSize: 14
+            },
+          }
+        ]
       },
       interval: null
     }
@@ -93,8 +166,8 @@ export default {
   methods: {
     setInterval() {
       setInterval(() => {
-        for(let i = 0; i < this.chartData.length; i++) {
-          this.$set(this.chartData, i, parseFloat((Math.random() * 100).toFixed(2)))
+        for(let i = 0; i < this.chartOptions.series[0].data.length; i++) {
+          this.$set(this.chartOptions.series[0].data[i], 'value', parseFloat((Math.random() * 100).toFixed(2)))
         }
       }, 2000)
     }

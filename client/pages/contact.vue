@@ -246,8 +246,6 @@
 </style>
 
 <script>
-import axios from "axios"
-
 export default {
   head() {
     return {
@@ -298,13 +296,13 @@ export default {
     sendEmail: function () {
       this.loading = true
 
-      let messageParams = {
+      let payload = {
         name: this.name,
         email: this.email,
         message: this.message
       }
 
-      this.$axios.post('/contact/sendEmail', messageParams)
+      this.$axios.post('/contact/sendEmail', payload)
         .then((response) => {
           this.error = false
           this.$refs.form.reset()

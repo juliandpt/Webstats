@@ -194,35 +194,36 @@ router.get('/tops', async (req, res) => {
 router.get('/grades', async (req, res) => {
   console.log('GET /domain/grades'.italic.yellow)
 
-  let grades = new Array()
-
-  Domain.find({}, 'endpoints')
-    .then((results) => {
-      for (i = 0; i < results.length; i++) {
-        endpoints = results[i].endpoints
-
-        for (j = 0; j < endpoints.length; j++) {
-          grades.push(results[i].endpoints[j].grade)
+  Domain.aggregate(
+    [
+      { "$unwind": "$endpoints" },
+      {
+        $group: {
+          _id: "$endpoints.grade",
+          'grades': {
+            $sum: 1
+          }
         }
+      }
+    ],
+    function (error, result) {
+      if (error) {
+        console.error('Errors ocurred: \n%s'.red, error)
+
+        return res
+          .status(500)
+          .send({
+            status: "reject"
+          })
       }
 
       console.log('Generated results'.green)
 
       return res
         .status(200)
-        .send({
-          grades
-        })
-    })
-    .catch((error) => {
-      console.error('Errors ocurred: \n%s'.red, error)
-
-      return res
-        .status(500)
-        .send({
-          status: "reject"
-        })
-    })
+        .send(result)
+    }
+  )
 })
 
 router.get('/weekly', async (req, res) => {
@@ -267,9 +268,7 @@ router.get('/weekly', async (req, res) => {
 
       return res
         .status(200)
-        .send({
-          result
-        })
+        .send(result)
     }
   )
 })

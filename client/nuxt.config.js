@@ -28,7 +28,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/apex-charts',
+    '~/plugins/axios',
+    '~/plugins/echarts',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -38,6 +39,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/composition-api/module'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -73,7 +75,7 @@ export default {
           secondary: colors.grey.base,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: colors.red.accent2,
           success: colors.green.accent3
         }
       }

@@ -57,7 +57,7 @@
                 clearable
                 persistent-hint
                 clear-icon="mdi-window-close"
-                label="Enter your email"
+                label="email"
                 color="primary"
                 v-model="email"
                 :error="errorEmail"
@@ -76,7 +76,7 @@
                 auto-grow
                 required
                 persistent-hint
-                label="Enter your password"
+                label="contraseña"
                 color="primary"
                 v-model="password"
                 @click:append="show = !show"
@@ -138,35 +138,35 @@ export default {
       title: "Sign in",
     };
   },
-  data() {
-    return {
-      valid: false,
-      loading: false,
-      errorEmail: false,
-      errorEmailMessage: "",
-      errorPassword: false,
-      errorPasswordMessage: "",
-      show: false,
-      email: "",
-      password: "",
-    }
-  },
+  data: () => ({
+    valid: false,
+    loading: false,
+    errorEmail: false,
+    errorEmailMessage: "",
+    errorPassword: false,
+    errorPasswordMessage: "",
+    show: false,
+    email: '',
+    password: ''
+  }),
   methods: {
-    login() {
+    login: function () {
       this.loading = true
 
-      let userParams = {
+      let payload = {
         email: this.email,
         password: this.password
       }
 
-      this.$axios.get('/login', userParams)
-      .then((response) => {
-        
-      })
-      .catch((error) => {
+      this.$axios.post('/admin/login', payload)
+        .then((response) => {
+          localStorage.setItem('token', response.data.token)
+          this.$route.push('/admin')
+        })
+        .catch((error) => {
+          console.error(error)
+        })
 
-      })
     }
   }
 };

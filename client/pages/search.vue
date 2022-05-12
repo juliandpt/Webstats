@@ -122,19 +122,20 @@ export default {
     this.$axios.get('/domain/recents')
       .then((response) => {
         this.suggestions = response.data.results
-        console.log(response)
       })
       .catch((error) => {
+        console.log(error)
       })
   },
   methods: {
     getDomainInfo: function (domain) {
       this.$axios.get('/domain/search', )
-      .then((response) => {
-        this.suggestions = response
-      })
-      .catch((error) => {
-      })
+        .then((response) => {
+          this.suggestions = response
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     convertDomain: function (url) {
       let res = new URL(url)

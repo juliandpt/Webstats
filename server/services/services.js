@@ -29,18 +29,12 @@ async function getDomainLogo(url) {
   })
 }
 
-function createToken(admin) {
-  var payload = {
-    sub: admin,
-    iat: timestamp.getTime(),
-    exp: timestampAdd.getTime()
-  }
-
-  return jwt.sign(payload, process.env.SECRET_TOKEN)
+function createToken(id) {
+  return jwt.sign( { _id: id }, process.env.SECRET_TOKEN)
 }
 
-function decodeToken(token, secret) {
-  return jwt.verify(token, secret)
+function decodeToken(token) {
+  return jwt.verify(token, process.env.SECRET_TOKEN)
 }
 
 function encryptPassword(password) {

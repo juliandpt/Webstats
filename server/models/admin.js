@@ -9,8 +9,9 @@ require("colors")
 
 let router = express.Router()
 
-router.get('/login', async (req, res) => {
-  console.log('GET /login: %s'.italic.yellow, req.body.email)
+router.post('/login', async (req, res) => {
+  console.log('POST /login: %s'.italic.yellow, req.body.email)
+  console.log(req.headers.authorization)
 
   Admin.findOne({ email: req.body.email }, (error, admin) => {
     if (error) {
@@ -27,9 +28,9 @@ router.get('/login', async (req, res) => {
       console.error('%s not found'.red, req.body.email)
 
       return res
-        .status(400)
+        .status(404)
         .send({
-          status: 'error'
+          message: 'user not found'
         })
     }
     
@@ -37,20 +38,24 @@ router.get('/login', async (req, res) => {
       console.error('%s password dont match'.red, req.body.email)
 
       return res
-        .status(401)
+        .status(400)
         .send({
-          status: 'error'
+          message: 'invalid credentials'
         })
     }
 
-    let token = service.createToken(admin)
+    let token = service.createToken(admin._id)
 
     console.log('%s logged in succesfully!'.green, req.body.email)
 
     return res
       .status(200)
+      .cookie('token', token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000
+      })
       .send({
-        status: 'success',
+        admin,
         token: token
       })
   })
@@ -66,14 +71,14 @@ router.put('/register', async (req, res) => {
     password: service.encryptPassword(req.body.password),
   })
 
-  newAdmin.save((error, response) => {
+  newAdmin.save((error, admin) => {
     if (error) {
       console.error('Error inserting admin in database: \n%s'.red, error)
 
       return res
         .status(500)
         .send({
-          status: 'error'
+          message: 'Error inserting admin in database'
         })
     }
 
@@ -81,14 +86,38 @@ router.put('/register', async (req, res) => {
 
     return res
       .status(200)
-      .send({
-        status: 'success'
-      })
+      .send(admin)
   })
 })
 
-router.delete('/delete/:id', middleware.verifyToken, async (req, res) => {
+router.get('/user', middleware.verifyToken, async (req, res) => {
+  Admin.findOne( { _id: req.sub._id }, '_id name surnames email', (err, admin) => {
+    if (err) {
+      return res
+        .status(404)
+        .send({
+          message: 'user not found'
+        })
+    }
+
+    return res
+      .status(200)
+      .send(admin)
+  })
+})
+
+router.post('/logout', middleware.verifyToken, async (req, res) => {
+  return res
+      .status(200)
+      .cookie('token', '', { maxAge: 0 })
+      .send({
+        message: 'logged out!'
+      })
+})
+
+router.delete('/delete/:id', async (req, res) => {
   console.log('DELETE /delete: %s'.italic.yellow, req.params.id)
+  console.log(req.params.id)
 
   Admin.findByIdAndDelete(req.params.id, (error, admin) => {
       if (error) {
@@ -106,15 +135,24 @@ router.delete('/delete/:id', middleware.verifyToken, async (req, res) => {
       return res
         .status(200)
         .send({
-          status: 'success'
+          message: 'deleted'
         })
     })
 })
 
-router.post('/edit/:id', middleware.verifyToken, async (req, res) => {
+router.post('/edit/:id', async (req, res) => {
   console.log('POST /edit: %s'.italic.yellow, req.params.id)
+  console.log(req.params.id)
 
-  Admin.findByIdAndUpdate(req.params.id, { ...req.body }, (error, admin) => {
+  Admin.findByIdAndUpdate(
+    req.params.id, 
+    { 
+      name: req.body.name,
+      surnames: req.body.surnames,
+      email: req.body.email,
+      password: service.encryptPassword(req.body.password),
+    }, 
+    (error, admin) => {
       if (error) {
         console.error('Error editing admin: \n%s'.red, error)
 
@@ -125,12 +163,12 @@ router.post('/edit/:id', middleware.verifyToken, async (req, res) => {
           })
       }
 
-      console.log('Admin data updated!'.green,)
+      console.log('%s data updated!'.green, req.body.name)
 
       return res
         .status(200)
         .send({
-          status: 'success'
+          message: 'edited'
         })
     })
 })
@@ -153,9 +191,7 @@ router.get('/getAdmins', async (req, res) => {
 
       return res
         .status(200)
-        .send({
-          admins
-        })
+        .send(admins)
     })
 })
 

@@ -16,99 +16,39 @@ async function domainStatus(dom) {
 }
 
 async function verifyToken(req, res, next) {
-  if (!req.headers.authorization) {
-    return res.status(401).send({
-      status: "ko"
-    })
-  }
+  try {
+    console.log(req.headers.authorization)
+    if(!req.headers.authorization) {
+      return res.status(401).send({
+        message: "Unauthenticated"
+      })
+    }
 
-  const token = req.headers.authorization.split(' ')[1]
+    const token = req.headers.authorization.split(' ')[1]
 
-  if (token === 'null') {
-    return res.status(401).send({
-      status: "ko"
-    })
-  }
+    if (!token) {
+      return res
+        .status(401)
+        .send({
+          message: "Unauthenticated"
+        })
+    }
 
-  const payload = service.decodeToken(token, process.env.SECRET_TOKEN)
+    const payload = service.decodeToken(token)
 
-  if (token !== query[0].token) {
-    return res.status(401).send({
-      status: "ko"
-    })
-  }
-
-  const payloadDatabase = service.decodeToken(query[0].token, process.env.SECRET_TOKEN)
-
-  if (moment().unix() > payloadDatabase.exp) {
-    return res.status(401).send({
-      status: "ko"
-    })
-  }
-
-  req.sub = payload.sub
-  next()
-}
-
-async function verifySearchToken(req, res, next) {
-  if (!req.headers.authorization) {
-    return res.status(401).send({
-      status: "ko"
-    })
-  }
-
-  const token = req.headers.authorization.split(' ')[1]
-
-  if (!token || token === 'null') {
-    req.sub = 0
-    next()
-  } else {
-    const payload = service.decodeToken(token, process.env.SECRET_TOKEN)
-
-    req.sub = payload.sub
+    req.sub = payload
     next()
   }
-}
-
-async function verifyAdminToken(req, res, next) {
-  if (!req.headers.authorization) {
-    return res.status(401).send({
-      status: "ko"
-    })
+  catch (error) {
+    return res
+      .status(401)
+      .send({
+        message: "Unauthenticated"
+      })
   }
-
-  const token = req.headers.authorization.split(' ')[1]
-
-  if (!token || token === undefined || token === 'null') {
-    return res.status(401).send({
-      status: "ko"
-    })
-  }
-
-  const payload = service.decodeToken(token, process.env.SECRET_TOKEN)
-  //const query = await pool.query("SELECT token FROM users WHERE users.id_user = ? AND isAdmin = 1", [payload.sub])
-
-  if (query[0] === undefined) {
-    return res.status(401).send({
-      status: "ko"
-    })
-  }
-
-  const payloadDatabase = service.decodeToken(query[0].token, process.env.SECRET_TOKEN)
-
-  if (moment().unix() > payloadDatabase.exp) {
-    return res.status(401).send({
-      status: "ko"
-    })
-  }
-
-  req.sub = payload.sub
-  next()
 }
 
 module.exports = {
   domainStatus,
-  verifyToken,
-  verifyAdminToken,
-  verifySearchToken
+  verifyToken
 }
