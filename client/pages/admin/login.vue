@@ -161,9 +161,11 @@ export default {
       this.$axios.post('/admin/login', payload)
         .then((response) => {
           localStorage.setItem('token', response.data.token)
-          this.$route.push('/admin')
+          this.$router.push('/admin')
+          
         })
         .catch((error) => {
+          this.loading = false
           console.error(error)
         })
 

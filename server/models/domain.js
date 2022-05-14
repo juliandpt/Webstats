@@ -10,11 +10,12 @@ let router = express.Router()
 let timestamp = new Date();
 let restTimestamp = timestamp.getDate()-7
 
-router.get('/search', async (req, res) => {
-  console.log('GET /domain/domain=%s'.italic.yellow, req.body.domain)
+router.post('/search', async (req, res) => {
+  console.log('POST /domain/domain=%s'.italic.yellow, req.body.domain)
 
   switch (await middleware.domainStatus(req.body.domain)) {
     case "isOk":
+      console.log('%s has alreadey been searched recently'.italic.green, req.body.domain)
       await Domain.findOneAndUpdate(
         { host: req.body.domain },
         {
@@ -39,14 +40,13 @@ router.get('/search', async (req, res) => {
 
           return res
             .status(200)
-            .send({
-              results
-            })
+            .send(results)
         }).clone
 
       break
 
     case "isOld":
+      console.log('%s has alreadey been searched, but is old'.italic.green, req.body.domain)
       await ssllabs.analyze({
         "host": req.body.domain,
         "fromCache": true,
@@ -90,14 +90,13 @@ router.get('/search', async (req, res) => {
 
             return res
               .status(200)
-              .send({
-                results
-              })
+              .send(results)
           }).clone
       })
       break
 
     case "isNew":
+      console.log('%s has never been searched'.italic.green, req.body.domain)
       await ssllabs.analyze({
         "host": req.body.domain,
         "fromCache": true,
@@ -134,9 +133,7 @@ router.get('/search', async (req, res) => {
         console.log('Generated results for %s'.green, req.body.domain)
         return res
           .status(200)
-          .send({
-            ...data
-          })
+          .send(data)
       });
 
       break
@@ -147,14 +144,12 @@ router.get('/recents', async (req, res) => {
   console.log('GET /domain/recents'.italic.yellow)
 
   Domain.find({}, 'host lastSearched logo timesSearched', { sort: { lastSearched: -1 } })
-    .then((results) => {
+    .then((recents) => {
       console.log('Generated results'.green)
 
       return res
         .status(200)
-        .send({
-          results
-        })
+        .send(recents)
     })
     .catch((error) => {
       console.error('Errors ocurred: \n%s'.red, error)
@@ -171,14 +166,12 @@ router.get('/tops', async (req, res) => {
   console.log('GET /domain/tops'.italic.yellow)
 
   Domain.find({}, 'host timesSearched logo', { sort: { timesSearched: -1 } })
-    .then((results) => {
+    .then((tops) => {
       console.log('Generated results'.green)
 
       return res
         .status(200)
-        .send({
-          results
-        })
+        .send(tops)
     })
     .catch((error) => {
       console.error('Errors ocurred: \n%s'.red, error)
@@ -191,7 +184,7 @@ router.get('/tops', async (req, res) => {
     })
 })
 
-router.get('/grades', async (req, res) => {
+router.get('/grades', middleware.verifyToken, async (req, res) => {
   console.log('GET /domain/grades'.italic.yellow)
 
   Domain.aggregate(
@@ -206,7 +199,7 @@ router.get('/grades', async (req, res) => {
         }
       }
     ],
-    function (error, result) {
+    function (error, grades) {
       if (error) {
         console.error('Errors ocurred: \n%s'.red, error)
 
@@ -221,12 +214,12 @@ router.get('/grades', async (req, res) => {
 
       return res
         .status(200)
-        .send(result)
+        .send(grades)
     }
   )
 })
 
-router.get('/weekly', async (req, res) => {
+router.get('/weekly', middleware.verifyToken, async (req, res) => {
   console.log('GET /domain/weekly'.italic.yellow)
 
   var date = new Date();
@@ -253,7 +246,7 @@ router.get('/weekly', async (req, res) => {
         }
       }
     ],
-    function (error, result) {
+    function (error, weekly) {
       if (error) {
         console.error('Errors ocurred: \n%s'.red, error)
 
@@ -268,7 +261,7 @@ router.get('/weekly', async (req, res) => {
 
       return res
         .status(200)
-        .send(result)
+        .send(weekly)
     }
   )
 })

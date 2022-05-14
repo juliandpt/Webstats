@@ -1,54 +1,269 @@
 <template>
+
   <v-container
     style="height: 100%"
     :style="$vuetify.breakpoint.xl ? 'padding: 0 15%' : ''"
   >
-    <div style="max-height: 50%">
-      <p>Lista de usuarios</p>
-      <v-card rounded class="pa-5">
-        <v-row class="font-weight-bold px-2" no-gutters>
-          <v-col cols="2">
-            <p>Nombre</p>
-          </v-col>
-          <v-col cols="2">
-            <p>Email</p>
-          </v-col>
-        </v-row>
-        <div class="table">
-          <v-row
-            v-for="user in users"
-            :key="user._id"
-            align="center"
-            class="rounded table-row"
-            no-gutters
+    <div
+      :class="$vuetify.theme.dark ? 'glass-black' : 'glass-white'"
+    >
+      <v-card
+        flat
+        color="transparent"
+      >
+        <v-app-bar
+          flat
+          plain
+          color="transparent"
+        >
+          <v-btn
+            icon
+            text
+            large
+            :color="$vuetify.theme.dark ? 'white' : 'black'"
+            v-if="$vuetify.breakpoint.xs"
+            @click.stop="drawer = !drawer"
           >
-            <v-col cols="2">
-              <p>{{ user.name }} {{ user.surnames }}</p>
-            </v-col>
-            <v-col cols="2" class="cut-text">
-              <p>{{ user.email }}</p>
-            </v-col>
-            <v-spacer />
-            <v-col>
-              <v-row no-gutters justify="end">
-                <v-btn icon>
-                  <v-icon @click="selectDeleteAdmin(user._id)">mdi-delete</v-icon>
+            <img
+              src="/icons/bars-white.svg"
+              height="24"
+              width="24"
+              v-if="$vuetify.theme.dark"
+            >
+
+            <img
+              src="/icons/bars-black.svg"
+              height="24"
+              width="24"
+              v-else
+            >
+          </v-btn>
+
+          <v-toolbar-title
+            class="pa-0 d-flex align-center"
+          >
+            <div 
+              class="mr-2"
+              v-if="!$vuetify.breakpoint.xs"
+            >
+              <img
+              src="/icons/chart.svg"
+              height="28"
+              width="28"
+            ></div>
+
+            <div
+              v-if="!$vuetify.breakpoint.xs"
+            >
+              Webstats
+            </div>
+          </v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <div
+            class="d-flex align-center"
+          >
+            <div
+              class="mr-5"
+            >
+              Hola, {{ admin.name }}
+            </div>
+
+            <v-menu
+              offset-y
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  fab
+                  elevation="0"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <!-- {{ getLetter(admin.name) }} -->
+                  {{ admin.name }}
                 </v-btn>
-                <v-btn icon>
-                  <v-icon @click="editDialog = true">mdi-pencil</v-icon>
-                </v-btn>
-              </v-row>
-            </v-col>
-          </v-row>
-        </div>
+              </template>
+
+              <v-list>
+                <v-list-item
+                >
+                  <v-btn
+                    color="secondary"
+                    text
+                    block
+                     @click="selectEditAdmin(admin._id)"
+                  >
+                    Editar
+                  </v-btn>
+                </v-list-item>
+                <v-list-item
+                >
+                  <v-btn
+                    color="error"
+                    text
+                    block
+                    @click="userLogout()"
+                  >
+                    Cerrar sesión
+                  </v-btn>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
+        </v-app-bar>
       </v-card>
     </div>
+
+    <div>
+      <div
+        class="mt-16 mb-8 d-flex flex-row align-center"
+      >
+        <img
+          src="/icons/admins.svg"
+          height="24"
+          width="24"
+          class="mr-4"
+        />
+
+        <span> Administradores </span>
+
+        <v-spacer />
+        
+        <v-btn
+          fab
+          icon
+          color="primary"
+        >
+          <img 
+            src="/icons/plus.svg"
+            height="40"
+            width="40"
+          />
+        </v-btn>
+      </div>
+
+      <v-row>
+        <v-col  
+          xs="12"
+          sm="12"
+          md="12"
+          lg="4"
+          v-for="a in admins"
+          :key="a._id"
+        >
+          <v-card
+            class="text-center"
+          >
+            <v-card-title>
+              <v-spacer />
+              
+              <v-menu
+              offset-y
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <img 
+                    src="/icons/dots.svg"
+                    height="25"
+                    width="25"
+                  />
+                </v-btn>
+              </template>
+
+              <v-list>
+                <v-list-item
+                >
+                  <v-btn
+                    color="secondary"
+                    text
+                    block
+                    @click="selectEditAdmin(a)"
+                  >
+                    Editar
+                  </v-btn>
+                </v-list-item>
+                <v-list-item
+                >
+                  <v-btn
+                    color="error"
+                    text
+                    block
+                    @click="selectDeleteAdmin(a)"
+                  >
+                    Eliminar
+                  </v-btn>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            </v-card-title>
+
+            <v-card-text
+              class="pa-4"
+            >
+              <v-avatar
+                size="100"
+                color="primary"
+                class="text-h4"
+              >
+                {{ getLetter(a.name) }}
+              </v-avatar>
+            </v-card-text>
+
+            <v-card-text
+              class="font-weight-black pb-0"
+            >
+              {{ a.name }} {{ a.surnames }}
+            </v-card-text>
+
+            <v-card-text
+              class="pb-8"
+            >
+              {{ a.email }}
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+
     <div class="pt-5" style="height: 50%">
-      <p>Estadísticas</p>
+      <div
+        class="mt-16 mb-8 d-flex flex-row align-center"
+      >
+        <img
+          src="/icons/dashboard.svg"
+          height="24"
+          width="24"
+          class="mr-4"
+        />
+
+        <span> Dashboard </span>
+      </div>
       <v-row style="height: 100%; max-height: 100%">
         <v-col cols="6">
           <v-card rounded class="pa-5" style="height: 100%">
-            <p>Busquedas mas recientes</p>
+            <div
+              class="mt-2 mb-4 d-flex flex-row align-center"
+            >
+              <img
+                src="/icons/clock.svg"
+                height="24"
+                width="24"
+                class="mr-4"
+              />
+
+              <span 
+                class="text-secondary"
+              >
+                Recientes
+              </span>
+            </div>
+
             <div class="table">
               <v-row
                 v-for="recent in recents"
@@ -69,7 +284,23 @@
         </v-col>
         <v-col cols="6">
           <v-card rounded class="pa-5" style="height: 100%">
-            <p>Top busquedas</p>
+            <div
+              class="mt-2 mb-4 d-flex flex-row align-center"
+            >
+              <img
+                src="/icons/trophy.svg"
+                height="24"
+                width="24"
+                class="mr-4"
+              />
+
+              <span 
+                class="text-secondary"
+              >
+                Más buscados
+              </span>
+            </div>
+
             <div class="table">
               <v-row
                 v-for="top in tops"
@@ -96,16 +327,45 @@
         </v-col>
         <v-col cols="6">
           <v-card rounded class="px-5 pt-5" style="height: 100%">
-            <!-- <apexchart
-              type="radialBar"
-              :series="timeCharData.chartData"
-              :options="timeCharData.chartOptions"
-            ></apexchart> -->
+            <div
+              class="mt-2 mb-4 d-flex flex-row align-center"
+            >
+              <img
+                src="/icons/schedule.svg"
+                height="24"
+                width="24"
+                class="mr-4"
+              />
+
+              <span 
+                class="text-secondary"
+              >
+                Ultimas busquedas
+              </span>
+            </div>
+
             <v-chart :option="chartOptions" />
           </v-card>
         </v-col>
         <v-col cols="6">
           <v-card rounded class="pa-5" style="height: 100%">
+            <div
+              class="mt-2 mb-4 d-flex flex-row align-center"
+            >
+              <img
+                src="/icons/medal.svg"
+                height="24"
+                width="24"
+                class="mr-4"
+              />
+
+              <span 
+                class="text-secondary"
+              >
+                Rango de endpoints
+              </span>
+            </div>
+
             <v-chart :option="pieChartOptions" />
           </v-card>
         </v-col>
@@ -279,7 +539,8 @@
         </v-card-title>
 
         <v-card-text class="text-center">
-          Estas seguro que quieres eliminar a Admin?
+          <!-- Estas seguro que quieres eliminar a {{ selectedAmin.name }}? -->
+          Estas seguro que quieres realizar esta acción?
         </v-card-text>
 
         <v-card-text>
@@ -304,7 +565,7 @@
                 elevation="0"
                 @click="deleteDialog = !deleteDialog"
               >
-                Cancel
+                Cancelar
               </v-btn>
             </v-col>
 
@@ -318,7 +579,7 @@
                 :loading="loading"
                 @click="deleteAdmin()"
               >
-                Delete
+                Eliminar
               </v-btn>
             </v-col>
           </v-row>
@@ -338,11 +599,14 @@ export default {
   },
   data() {
     return {
-      users: [],
+      admin: {},
+      admins: [],
       recents: [],
       tops: [],
+
       editDialog: false,
       deleteDialog: false,
+
       loading: false,
       name: "",
       surnames: "",
@@ -351,6 +615,7 @@ export default {
       repeatPassword: "",
       selectedAdmin: "",
       repeatPasswordRules: [(value) => value === password],
+
       chartOptions: {
         color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
         tooltip: {
@@ -442,13 +707,17 @@ export default {
   },
   async created() {
     try {
-      this.users = (await this.$axios.$get("/admin/getAdmins"));
-      this.recents = (await this.$axios.$get("/domain/recents")).results;
-      this.tops = (await this.$axios.$get("/domain/tops")).results;
+      this.admin = (await this.$axios.$get("/admin/user"))
+      //this.admin.src = getLetter(this.admin.name)
+      this.admins = (await this.$axios.$get("/admin/getAdmins"))
+      this.recents = (await this.$axios.$get("/domain/recents"))
+      this.tops = (await this.$axios.$get("/domain/tops"))
       await this.setWeeklyData()
       await this.setGrades()
-    } catch (error) {
+    } 
+    catch (error) {
       console.log(error);
+      this.$router.push('/admin/login')
     }
   },
   methods: {
@@ -481,8 +750,7 @@ export default {
       this.editDialog = true
     },
     deleteAdmin() {
-      console.log(this.selectedAdmin)
-      this.$axios.delete(`/admin/delete/${this.selectedAdmin}`)
+      this.$axios.delete(`/admin/delete/${this.selectedAdmin._id}`)
         .then((repsonse) => {
           console.log(repsonse)
         })
@@ -491,14 +759,37 @@ export default {
         })
     },
     editAdmin() {
+      if (this.name === "") this.name = selectedAdmin.name
+      if (this.surnames === "") this.surnames = selectedAdmin.surnames
+      if (this.email === "") this.email = selectedAdmin.email
+      if (this.password === "") this.password = "1234"
+
       let payload = {
         name: this.name,
-        surnames
+        surnames: this.surnames,
+        email: this.email,
+        password: this.password
       }
+
+      this.$axios.post(`/admin/edit/${this.selectedAdmin._id}`, payload)
+        .then((repsonse) => {
+          console.log(repsonse)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     userLogout() {
       localStorage.removeItem('token');
-      this.$router.push('/login')
+      this.$router.push('/admin/login')
+    },
+    toggleTheme: function () {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
+    },
+    getLetter(name) {
+      let string = name.charAt(0).toUpperCase()
+      return string
     }
   },
 };
@@ -522,5 +813,19 @@ export default {
     white-space: nowrap;
     overflow: hidden;
   }
+}
+.glass-white {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.glass-black {
+  background-color: rgb(18, 18, 18, 0.8);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 </style>

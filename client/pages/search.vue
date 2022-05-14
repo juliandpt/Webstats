@@ -14,6 +14,8 @@
         hint="https://www.example.com"
         label="Buscar"
         placeholder="Buscar"
+        v-model="domain"
+        @keyup.enter="getDomainInfo()"
       >
         <template 
           v-slot:prepend-inner
@@ -36,10 +38,7 @@
     <v-row>
       <v-col
         xs="12"
-        sm="6"
         md="6"
-        lg="4"
-        xl="4"
         class="pb-0"
         v-for="(item, i) in suggestions"
         :key="i"
@@ -102,8 +101,8 @@
 
 <style lang="scss" scoped>
 .input {
-  min-height: 15rem;
-  padding: 0 20%;
+  min-height: 30rem;
+  padding: 0 15%;
 }
 </style>
 
@@ -116,26 +115,24 @@ export default {
   },
   data: () => ({
     loading: false,
+    domain: "",
     suggestions: []
   }),
   mounted() {
     this.$axios.get('/domain/recents')
       .then((response) => {
-        this.suggestions = response.data.results
+        this.suggestions = response.data
       })
       .catch((error) => {
         console.log(error)
       })
   },
   methods: {
-    getDomainInfo: function (domain) {
-      this.$axios.get('/domain/search', )
-        .then((response) => {
-          this.suggestions = response
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+    getDomainInfo: function () {
+      this.$router.push({
+        path: '/domain',
+        query: { q: this.domain },
+      })
     },
     convertDomain: function (url) {
       let res = new URL(url)

@@ -17,7 +17,6 @@ async function domainStatus(dom) {
 
 async function verifyToken(req, res, next) {
   try {
-    console.log(req.headers.authorization)
     if(!req.headers.authorization) {
       return res.status(401).send({
         message: "Unauthenticated"

@@ -11,7 +11,6 @@ let router = express.Router()
 
 router.post('/login', async (req, res) => {
   console.log('POST /login: %s'.italic.yellow, req.body.email)
-  console.log(req.headers.authorization)
 
   Admin.findOne({ email: req.body.email }, (error, admin) => {
     if (error) {
@@ -91,7 +90,7 @@ router.put('/register', async (req, res) => {
 })
 
 router.get('/user', middleware.verifyToken, async (req, res) => {
-  Admin.findOne( { _id: req.sub._id }, '_id name surnames email', (err, admin) => {
+  Admin.findOne( { _id: req.sub._id }, '_id name email', (err, admin) => {
     if (err) {
       return res
         .status(404)
@@ -115,7 +114,7 @@ router.post('/logout', middleware.verifyToken, async (req, res) => {
       })
 })
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', middleware.verifyToken, async (req, res) => {
   console.log('DELETE /delete: %s'.italic.yellow, req.params.id)
   console.log(req.params.id)
 
@@ -140,7 +139,7 @@ router.delete('/delete/:id', async (req, res) => {
     })
 })
 
-router.post('/edit/:id', async (req, res) => {
+router.post('/edit/:id', middleware.verifyToken, async (req, res) => {
   console.log('POST /edit: %s'.italic.yellow, req.params.id)
   console.log(req.params.id)
 
@@ -173,7 +172,7 @@ router.post('/edit/:id', async (req, res) => {
     })
 })
 
-router.get('/getAdmins', async (req, res) => {
+router.get('/getAdmins', middleware.verifyToken, async (req, res) => {
   console.log('GET /getAdmins'.italic.yellow)
 
   Admin.find({}, (error, admins) => {

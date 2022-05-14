@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <navbar/>
+    <navbar />
 
     <v-main>
       <nuxt />
     </v-main>
 
-    <foot/>
+    <foot />
   </v-app>
 </template>
 
