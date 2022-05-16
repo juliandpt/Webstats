@@ -105,15 +105,6 @@ router.get('/user', middleware.verifyToken, async (req, res) => {
   })
 })
 
-router.post('/logout', middleware.verifyToken, async (req, res) => {
-  return res
-      .status(200)
-      .cookie('token', '', { maxAge: 0 })
-      .send({
-        message: 'logged out!'
-      })
-})
-
 router.delete('/delete/:id', middleware.verifyToken, async (req, res) => {
   console.log('DELETE /delete: %s'.italic.yellow, req.params.id)
   console.log(req.params.id)

@@ -140,10 +140,34 @@ router.post('/search', async (req, res) => {
   }
 })
 
-router.get('/recents', async (req, res) => {
+router.get('/domains', async (req, res) => {
+  console.log('GET /domain/domaind'.italic.yellow)
+
+  Domain.find({}, 'host logo')
+    .limit(20)
+    .then((recents) => {
+      console.log('Generated results'.green)
+
+      return res
+        .status(200)
+        .send(recents)
+    })
+    .catch((error) => {
+      console.error('Errors ocurred: \n%s'.red, error)
+
+      return res
+        .status(500)
+        .send({
+          status: "reject"
+        })
+    })
+})
+
+router.get('/recents', middleware.verifyToken, async (req, res) => {
   console.log('GET /domain/recents'.italic.yellow)
 
   Domain.find({}, 'host lastSearched logo timesSearched', { sort: { lastSearched: -1 } })
+    .limit(5)
     .then((recents) => {
       console.log('Generated results'.green)
 
@@ -162,10 +186,11 @@ router.get('/recents', async (req, res) => {
     })
 })
 
-router.get('/tops', async (req, res) => {
+router.get('/tops', middleware.verifyToken, async (req, res) => {
   console.log('GET /domain/tops'.italic.yellow)
 
   Domain.find({}, 'host timesSearched logo', { sort: { timesSearched: -1 } })
+    .limit(5)
     .then((tops) => {
       console.log('Generated results'.green)
 
@@ -216,7 +241,7 @@ router.get('/grades', middleware.verifyToken, async (req, res) => {
         .status(200)
         .send(grades)
     }
-  )
+  ).limit(5)
 })
 
 router.get('/weekly', middleware.verifyToken, async (req, res) => {

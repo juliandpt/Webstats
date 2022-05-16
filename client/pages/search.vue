@@ -15,7 +15,7 @@
         label="Buscar"
         placeholder="Buscar"
         v-model="domain"
-        @keyup.enter="getDomainInfo()"
+        @keyup.enter="searchDomain()"
       >
         <template 
           v-slot:prepend-inner
@@ -58,7 +58,12 @@
             <div>
 
               <v-card-text>
-                <p class="font-weight-bold">Nombre pagina</p>
+                <h2 
+                  class="font-weight-bold mb-2"
+                >
+                  {{ getName(item.host) }}
+                </h2>
+
                 {{ convertDomain(item.host) }}
               </v-card-text>
               <v-card-actions style="position: absolute; bottom: 0; right: 0">
@@ -66,7 +71,7 @@
                   icon
                   right
                   color="grey"
-                  @click="getDomainInfo(item.host)"
+                  @click="getDomain(item.host)"
                 >
                   <v-img
                     src="/icons/link.svg"
@@ -119,7 +124,7 @@ export default {
     suggestions: []
   }),
   mounted() {
-    this.$axios.get('/domain/recents')
+    this.$axios.get('/domain/domains')
       .then((response) => {
         this.suggestions = response.data
       })
@@ -128,16 +133,31 @@ export default {
       })
   },
   methods: {
-    getDomainInfo: function () {
+    searchDomain: function () {
       this.$router.push({
         path: '/domain',
         query: { q: this.domain },
+      })
+    },
+    getDomain: function (host) {
+      this.$router.push({
+        path: '/domain',
+        query: { q: host },
       })
     },
     convertDomain: function (url) {
       let res = new URL(url)
 
       return res.hostname
+    },
+    getName: function (url) {
+      let domain = new URL(url);
+      domain = domain.hostname.replace('www.','');
+      domain = domain.replace('.com','');
+      domain = domain.replace('.es','');
+      domain = domain.replace('.',' ');
+      
+      return domain
     }
   }
 };
