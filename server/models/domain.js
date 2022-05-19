@@ -244,7 +244,7 @@ router.get('/grades', middleware.verifyToken, async (req, res) => {
   ).limit(5)
 })
 
-router.get('/weekly', middleware.verifyToken, async (req, res) => {
+router.get('/weekly', async (req, res) => {
   console.log('GET /domain/weekly'.italic.yellow)
 
   var date = new Date();
@@ -269,7 +269,8 @@ router.get('/weekly', middleware.verifyToken, async (req, res) => {
             $sum: 1
           }
         }
-      }
+      },
+      { $sort: { _id: 1 } }
     ],
     function (error, weekly) {
       if (error) {

@@ -103,7 +103,6 @@ router.get('/user', middleware.verifyToken, async (req, res) => {
 
 router.delete('/delete/:id', middleware.verifyToken, async (req, res) => {
   console.log('DELETE /delete: %s'.italic.yellow, req.params.id)
-  console.log(req.params.id)
 
   Admin.findByIdAndDelete(req.params.id, (error, admin) => {
       if (error) {
@@ -128,7 +127,6 @@ router.delete('/delete/:id', middleware.verifyToken, async (req, res) => {
 
 router.post('/edit/:id', middleware.verifyToken, async (req, res) => {
   console.log('POST /edit: %s'.italic.yellow, req.params.id)
-  console.log(req.params.id)
 
   Admin.findByIdAndUpdate(
     req.params.id, 

@@ -169,44 +169,6 @@
                   rounded
                 >
                   <img 
-                    src="/icons/host-black.svg"
-                    height="25"
-                    width="25"
-                  />
-                </v-card>
-
-                <div>
-                  <v-card-title class="px-2 pt-2 pb-0">
-                    Host
-                  </v-card-title>
-
-                  <v-card-text class="px-2 pb-2">
-                    {{ domData.host }}
-                  </v-card-text>
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-
-          <v-col
-            xs="12"
-            md="4"
-          >
-            <v-card
-              :outlined="!$vuetify.theme.dark"
-            >
-              <div 
-                class="d-flex"
-              >
-                <v-card
-                  class="ma-3 d-flex align-center justify-center"
-                  height="50"
-                  width="50"
-                  elevation="0"
-                  :color="$vuetify.theme.dark ? 'secondary' : 'grey lighten-3'"
-                  rounded
-                >
-                  <img 
                     src="/icons/shield-black.svg"
                     height="25"
                     width="25"
