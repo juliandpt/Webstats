@@ -2,22 +2,23 @@
   <v-container 
     :style="$vuetify.breakpoint.xl ? 'padding: 0 15%' : ''"
   >
-    <div 
-      v-if="loading"
-    >
-      Cargando...
-    </div>
-
-    <div 
-      v-else
-    >
+    <div>
       <v-row 
         class="mt-16"
       >
         <v-spacer />
 
+        <div
+          v-if="loading"
+        >
+          <v-skeleton-loader 
+            type="avatar"
+          />
+        </div>
+
         <div 
           class="d-flex align-center"
+          v-else
         >
           <div 
             class="mr-5"
@@ -97,10 +98,19 @@
 
         <v-row>
           <v-col
-            xs="12"
             sm="12"
-            md="12"
-            lg="4"
+            md="4"
+            v-if="loading"
+          >
+            <v-skeleton-loader 
+              type="card"
+            />
+          </v-col>
+
+          <v-col
+            sm="12"
+            md="4"
+            v-else
             v-for="a in admins"
             :key="a._id"
           >
@@ -196,12 +206,14 @@
 
           <h2> Estadísticas </h2>
         </div>
+
         <v-row 
           style="height: 100%; 
           max-height: 100%"
         >
-          <v-col 
-            cols="6"
+          <v-col
+            sm="12"
+            md="6"
           >
             <v-card 
               rounded 
@@ -224,13 +236,27 @@
 
               <div 
                 class="table"
+                v-if="loading"
+              >
+                <v-row>
+                  <v-col>
+                    <v-skeleton-loader
+                    type="list-item, list-item, list-item, list-item, list-item"
+                  />
+                  </v-col>
+                </v-row>
+              </div>
+
+              <div 
+                class="table"
+                v-else
               >
                 <v-row
-                  v-for="recent in recents"
-                  :key="recent._id"
+                  no-gutters
                   align="center"
                   class="rounded table-row"
-                  no-gutters
+                  v-for="recent in recents"
+                  :key="recent._id"
                 >
                   <v-col 
                     cols="1"
@@ -248,8 +274,10 @@
               </div>
             </v-card>
           </v-col>
-          <v-col 
-            cols="6"
+
+          <v-col
+            sm="12"
+            md="6"
           >
             <v-card 
               rounded 
@@ -272,6 +300,20 @@
 
               <div 
                 class="table"
+                v-if="loading"
+              >
+                <v-row>
+                  <v-col>
+                    <v-skeleton-loader
+                    type="list-item, list-item, list-item, list-item, list-item"
+                  />
+                  </v-col>
+                </v-row>
+              </div>
+
+              <div 
+                class="table"
+                v-else
               >
                 <v-row
                   v-for="top in tops"
@@ -308,14 +350,16 @@
               </div>
             </v-card>
           </v-col>
+
           <v-col 
-            cols="6"
+            cols="12"
           >
             <v-card 
               rounded 
               :outlined="!$vuetify.theme.dark"
               class="px-5 pt-5" 
               style="height: 100%"
+              :min-height="loading ? '' : '450'"
             >
               <div 
                 class="mt-2 mb-4 d-flex flex-row align-center"
@@ -327,19 +371,30 @@
                   class="mr-4"
                 />
 
-                <span> Ultimas busquedas </span>
+                <span> Últimas busquedas </span>
               </div>
 
-              <v-chart :option="chartOptions" />
+              <v-skeleton-loader
+                v-if="loading"
+                type="image"
+              />
+
+              <v-chart 
+                v-else 
+                :option="chartOptions" 
+              />
             </v-card>
           </v-col>
-          <v-col cols="6">
+
+          <v-col 
+            cols="12"
+          >
             <v-card 
               rounded 
               :outlined="!$vuetify.theme.dark"
               class="pa-5" 
               style="height: 100%" 
-              min-height="450"
+              :min-height="loading ? '' : '450'"
             >
               <div 
                 class="mt-2 mb-4 d-flex flex-row align-center"
@@ -358,7 +413,15 @@
                 </span>
               </div>
 
-              <v-chart :option="pieChartOptions" />
+              <v-skeleton-loader
+                v-if="loading"
+                type="image"
+              />
+
+              <v-chart 
+                v-else 
+                :option="pieChartOptions" 
+              />
             </v-card>
           </v-col>
         </v-row>
@@ -421,8 +484,7 @@
                   class="rounded"
                   color="primary"
                   v-model="name"
-                >
-                </v-text-field>
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -443,8 +505,7 @@
                   class="rounded"
                   color="primary"
                   v-model="surnames"
-                >
-                </v-text-field>
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -465,8 +526,7 @@
                   class="rounded"
                   color="primary"
                   v-model="email"
-                >
-                </v-text-field>
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -486,9 +546,9 @@
                   hide-details="auto"
                   class="rounded"
                   color="primary"
+                  type="password"
                   v-model="password"
-                >
-                </v-text-field>
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -508,9 +568,10 @@
                   hide-details="auto"
                   class="rounded"
                   color="primary"
+                  type="password"
                   v-model="repeatPassword"
-                >
-                </v-text-field>
+                  :rules="repeatPasswordRules"
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -749,7 +810,7 @@ export default {
       password: "",
       repeatPassword: "",
       selectedAdmin: "",
-      repeatPasswordRules: [(value) => value === password],
+      repeatPasswordRules: [(value) => value === this.password],
 
       chartOptions: {
         color: ["#80FFA5", "#00DDFF", "#37A2FF", "#FF0087", "#FFBF00"],
@@ -848,9 +909,9 @@ export default {
       this.tops = await this.$axios.$get("/domain/tops");
       await this.setWeeklyData();
       await this.setGrades();
+
       this.loading = false;
     } catch (error) {
-      console.log(error);
       this.$router.push("/admin/login");
     }
   },
@@ -873,9 +934,9 @@ export default {
     deleteAdmin() {
       this.$axios
         .delete(`/admin/delete/${this.selectedAdmin._id}`)
-        .then((repsonse) => {
+        .then((response) => {
           this.error = false
-          this.text = 'Admin eliminado correctamente!'
+          this.text = 'Administrador eliminado'
           this.loading = false
           this.deleteDialog = false
           this.snackbarShow = true
@@ -900,8 +961,7 @@ export default {
         password: this.password,
       };
 
-      this.$axios
-        .post(`/admin/edit/${this.selectedAdmin._id}`, payload)
+      this.$axios.post(`/admin/edit/${this.selectedAdmin._id}`, payload)
         .then((response) => {
           this.error = false
           this.text = 'Admin editado correctamente!'
@@ -924,8 +984,7 @@ export default {
         password: this.password,
       };
 
-      this.$axios
-        .put('/admin/register', payload)
+      this.$axios.put('/admin/register', payload)
         .then((response) => {
           this.error = false
           this.text = 'Admin creado correctamente!'
@@ -960,6 +1019,7 @@ export default {
     },
     userLogout() {
       localStorage.removeItem("token");
+      this.$axios.defaults.headers.common['Authorization'] = null
       this.$router.push("/admin/login");
     },
     getLetter(name) {

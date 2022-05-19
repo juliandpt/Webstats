@@ -51,13 +51,8 @@
         md="6"
         sm="12"
         class="d-flex flex-column justify-center"
-        :order="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm ? '1' : '2'"
+        v-if="!$vuetify.breakpoint.xs"
       >
-        <!-- <apexchart
-          type="radialBar"
-          :series="data.chartData"
-          :options="data.chartOptions"
-        ></apexchart> -->
         <v-chart :option="chartOptions" />
       </v-col>
     </v-row>

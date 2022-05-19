@@ -15,6 +15,7 @@
         label="Buscar"
         placeholder="Buscar"
         v-model="domain"
+        :disabled="loading"
         @keyup.enter="searchDomain()"
       >
         <template 
@@ -36,14 +37,35 @@
     </v-row>
 
     <v-row>
+      <v-col>
+        <h2>
+          Recomendaciones
+        </h2>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col
+        xs="12"
+        md="6"
+        v-if="loading"
+      >
+        <v-skeleton-loader
+          type="list-item-avatar-two-line"
+        />
+      </v-col>
+
       <v-col
         xs="12"
         md="6"
         class="pb-0"
+        v-else
         v-for="(item, i) in suggestions"
         :key="i"
       >
-        <v-card>
+        <v-card
+          :outlined="!$vuetify.theme.dark"
+        >
           <div 
             class="d-flex"
           >
@@ -106,7 +128,7 @@
 
 <style lang="scss" scoped>
 .input {
-  min-height: 30rem;
+  min-height: 25rem;
   padding: 0 15%;
 }
 </style>
@@ -119,17 +141,19 @@ export default {
     };
   },
   data: () => ({
-    loading: false,
+    loading: true,
+    error: false,
     domain: "",
     suggestions: []
   }),
   mounted() {
     this.$axios.get('/domain/domains')
       .then((response) => {
+        this.loading = false
         this.suggestions = response.data
       })
       .catch((error) => {
-        console.log(error)
+        this.error = true
       })
   },
   methods: {

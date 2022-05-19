@@ -50,6 +50,18 @@
 
             <v-card-text
               class="pt-0 pb-3"
+              v-if="serverError"
+            >
+              <v-alert
+                color="error"
+                type="error"
+              >
+                Error del servidor
+              </v-alert>
+            </v-card-text>
+
+            <v-card-text
+              class="pt-0 pb-3"
             >
               <v-text-field
                 outlined
@@ -61,6 +73,7 @@
                 color="primary"
                 v-model="email"
                 :error="errorEmail"
+                :rules="emailRules"
                 :append-icon="email === '' || email == null ? 'mdi-email-outline' : ''"
                 :error-messages="errorEmail ? errorEmailMessage : ''"
                 @keyup.enter="login()"
@@ -80,6 +93,7 @@
                 color="primary"
                 v-model="password"
                 @click:append="show = !show"
+                :rules="passwordRules"
                 :append-icon="show ? 'mdi-lock-open-variant-outline' : 'mdi-lock-outline'"
                 :type="show ? 'text' : 'password'"
                 :error="errorPassword"
@@ -100,7 +114,7 @@
                 :loading="loading"
                 @click="login()"
               >
-                Sign in
+                Iniciar Sesión
               </v-btn>
             </v-card-text>
           </v-form>
@@ -141,13 +155,22 @@ export default {
   data: () => ({
     valid: false,
     loading: false,
+    serverError: false,
     errorEmail: false,
-    errorEmailMessage: "",
+    errorEmailMessage: "email no encontrado",
     errorPassword: false,
-    errorPasswordMessage: "",
+    errorPasswordMessage: "Contraseña incorrecta",
     show: false,
+
     email: '',
-    password: ''
+    emailRules: [
+      value => !!value,
+      value => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{1,}))$/.test(value),
+    ],
+    password: '',
+    passwordRules: [
+      value => !!value
+    ],
   }),
   methods: {
     login: function () {
@@ -161,12 +184,23 @@ export default {
       this.$axios.post('/admin/login', payload)
         .then((response) => {
           localStorage.setItem('token', response.data.token)
+          this.$axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
           this.$router.push('/admin')
           
         })
         .catch((error) => {
           this.loading = false
-          console.error(error)
+
+          if (error.response.status === 404) {
+            this.errorEmail = true
+          }
+          else if (error.response.status === 400) {
+            this.errorEmail = false
+            this.errorPassword = true
+          }
+          else {
+            this.serverError = true
+          }
         })
 
     }

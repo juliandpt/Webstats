@@ -75,6 +75,7 @@
 
         <v-row>
           <v-col
+            xs="12"
             md="4"
           >
             <v-card
@@ -112,6 +113,7 @@
           </v-col>
 
           <v-col
+            xs="12"
             md="4"
           >
             <v-card
@@ -149,6 +151,7 @@
           </v-col>
 
           <v-col
+            xs="12"
             md="4"
           >
             <v-card
@@ -186,6 +189,7 @@
           </v-col>
 
           <v-col
+            xs="12"
             md="4"
           >
             <v-card
@@ -303,7 +307,7 @@
                           </span>
                         </div>
 
-                        <v-chart :option="charOption" />
+                        <v-chart :option="fillGradeChartData(endpoint.grade)" autoresize />
                       </v-card>
                     </v-col>
                   </v-row>
@@ -315,7 +319,30 @@
                       <v-card
                         outlined
                       >
-                        sisiisissi
+                        <v-card-title
+                          class="d-flex flex-row align-center"
+                        >
+                          <img
+                            src="/icons/shield.svg"
+                            height="24"
+                            width="24"
+                            class="mr-4"
+                          />
+
+                          <span 
+                            class="text-secondary"
+                          >
+                            Protocolos utilizados
+                          </span>
+                        </v-card-title>
+
+                        <v-card-text 
+                          class="py-2 d-flex align-center"
+                          v-for="(protocol, i) in endpoint.details.protocols"
+                          :key="i"
+                        >
+                          {{ protocol.name }} {{ protocol.version }}
+                        </v-card-text>
                       </v-card>
                     </v-col>
 
@@ -495,10 +522,13 @@ export default {
               lineStyle: {
                 width: 6,
                 color: [
-                  [0.25, '#FF6E76'],
-                  [0.5, '#FDDD60'],
-                  [0.75, '#58D9F9'],
-                  [1, '#7CFFB2']
+                  [0, '#FF6E76'],
+                  [0.050, '#FF6E76'],
+                  [0.125, '#FF6E76'],
+                  [0.375, '#FDDD60'], 
+                  [0.625, '#7CFFB2'],
+                  [0.875, '#58D9F9'],
+                  [1, '#7CFFB2'],
                 ]
               }
             },
@@ -530,14 +560,26 @@ export default {
               fontSize: 20,
               distance: -60,
               formatter: function (value) {
-                if (value === 0.875) {
+                if (value === 1) {
+                  return 'A+';
+                } 
+                else if (value === 0.875) {
                   return 'A';
-                } else if (value === 0.625) {
+                } 
+                else if (value === 0.625) {
                   return 'B';
-                } else if (value === 0.375) {
+                } 
+                else if (value === 0.375) {
                   return 'C';
-                } else if (value === 0.125) {
+                }
+                else if (value === 0.125) {
                   return 'D';
+                }
+                else if (value === 0.050) {
+                  return 'E';
+                }
+                else if (value === 0) {
+                  return 'F';
                 }
                 return '';
               }
@@ -551,10 +593,10 @@ export default {
               valueAnimation: true,
               color: 'auto'
             },
+            center: ['50%', '75%'],
             data: [
               {
-                value: 0.7,
-                name: 'Grade Rating'
+                value: 0
               }
             ]
           }
@@ -573,6 +615,29 @@ export default {
       })
   },
   methods: {
+    gradeToScore(protection) {
+      switch (protection) {
+        case 'A+':
+          return 1
+        case 'A':
+          return 0.875
+        case 'B':
+          return 0.625
+        case 'C':
+          return 0.375
+        case 'D':
+          return 0.125
+        case 'F':
+          return 0
+        default:
+          return 0
+      }
+    },
+    fillGradeChartData(grade) {
+      let data = Object.assign({}, this.charOption)
+      data.series[0].data[0].value = this.gradeToScore(grade)
+      return data
+    },
     getDomain: function (url) {
       let domain = (new URL(url));
 

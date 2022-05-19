@@ -99,8 +99,8 @@ router.post('/search', async (req, res) => {
       console.log('%s has never been searched'.italic.green, req.body.domain)
       await ssllabs.analyze({
         "host": req.body.domain,
-        "fromCache": true,
-        "all": "on",
+        "startNew": true,
+        "all": "done",
       }, async function (error, response) {
         if (error) {
           console.error('Errors ocurred for %s: \n%s'.red, req.body.domain, error)
@@ -143,7 +143,7 @@ router.post('/search', async (req, res) => {
 router.get('/domains', async (req, res) => {
   console.log('GET /domain/domaind'.italic.yellow)
 
-  Domain.find({}, 'host logo')
+  Domain.find({}, 'host logo timesSearched')
     .limit(20)
     .then((recents) => {
       console.log('Generated results'.green)
