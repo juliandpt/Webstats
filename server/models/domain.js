@@ -141,7 +141,7 @@ router.post('/search', async (req, res) => {
 })
 
 router.get('/domains', async (req, res) => {
-  console.log('GET /domain/domaind'.italic.yellow)
+  console.log('GET /domain/domains'.italic.yellow)
 
   Domain.find({}, 'host logo timesSearched')
     .limit(20)

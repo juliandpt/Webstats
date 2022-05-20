@@ -184,9 +184,7 @@ export default {
       this.$axios.post('/admin/login', payload)
         .then((response) => {
           localStorage.setItem('token', response.data.token)
-          this.$axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
           this.$router.push('/admin')
-          
         })
         .catch((error) => {
           this.loading = false

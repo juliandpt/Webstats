@@ -1019,7 +1019,6 @@ export default {
     },
     userLogout() {
       localStorage.removeItem("token");
-      this.$axios.defaults.headers.common['Authorization'] = null
       this.$router.push("/admin/login");
     },
     getLetter(name) {
