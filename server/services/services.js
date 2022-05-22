@@ -10,12 +10,17 @@ async function getDomainLogo(url) {
   return new Promise((resolve, reject) => {
     try {
       websiteLogo(url, function (error, result) {
-        if (result.icon !== null) {
-          logo = result.icon.href
+        if (!result) {
+          console.error('Logo not generated: \n%s'.red, error)
+          logo = "/icons/noimage.svg"
           resolve(logo)
         }
         else if (result.openGraph[0] !== undefined) {
           logo = result.openGraph[0].href
+          resolve(logo)
+        }
+        else if (result.icon !== null) {
+          logo = result.icon.href
           resolve(logo)
         }
         else {

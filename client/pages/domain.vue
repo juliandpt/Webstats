@@ -487,10 +487,10 @@ export default {
                   [0, '#FF6E76'],
                   [0.050, '#FF6E76'],
                   [0.125, '#FF6E76'],
-                  [0.375, '#FDDD60'], 
-                  [0.625, '#7CFFB2'],
-                  [0.875, '#58D9F9'],
-                  [1, '#7CFFB2'],
+                  [0.375, '#FF9800'],
+                  [0.625, '#FDDD60'],
+                  [0.875, '#4CAF50'],
+                  [1, '#58D9F9'],
                 ]
               }
             },
@@ -590,6 +590,8 @@ export default {
         case 'D':
           return 0.125
         case 'F':
+          return 0
+        case 'T':
           return 0
         default:
           return 0
