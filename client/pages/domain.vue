@@ -567,7 +567,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.post(`/domain/search`, { domain: this.$route.query.q })
+    this.$axios.post(`/domain`, { domain: this.$route.query.q })
       .then((response) => {
         this.domData = response.data
         this.loading = false

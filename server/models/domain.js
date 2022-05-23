@@ -10,8 +10,8 @@ let router = express.Router()
 let timestamp = new Date();
 let restTimestamp = timestamp.getDate()-7
 
-router.post('/search', async (req, res) => {
-  console.log('POST /domain/domain=%s'.italic.yellow, req.body.domain)
+router.post('/', async (req, res) => {
+  console.log('POST /domain=%s'.italic.yellow, req.body.domain)
 
   switch (await middleware.domainStatus(req.body.domain)) {
     case "isOk":
@@ -244,7 +244,7 @@ router.get('/grades', middleware.verifyToken, async (req, res) => {
   ).limit(5)
 })
 
-router.get('/weekly', async (req, res) => {
+router.get('/weekly', middleware.verifyToken, async (req, res) => {
   console.log('GET /domain/weekly'.italic.yellow)
 
   var date = new Date();
@@ -290,51 +290,6 @@ router.get('/weekly', async (req, res) => {
         .send(weekly)
     }
   )
-})
-
-router.post('/', async (req, res) => {
-  console.log('POST /domain/domain=%s'.italic.yellow, req.body.domain)
-
-  console.log('%s has never been searched'.italic.green, req.body.domain)
-    await ssllabs.analyze({
-      host: req.body.domain,
-      publish: true,
-      fromCache: true,
-      all: "done",
-    }, async function (error, response) {
-      if (error) {
-        console.error('Errors ocurred for %s: \n%s'.red, req.body.domain, error)
-
-        return res
-          .status(400)
-          .send({
-            status: "reject"
-          })
-      }
-
-      let data = {
-        lastUpdated: timestamp,
-        lastSearched: timestamp,
-        timesSearched: 1,
-        logo: await service.getDomainLogo(req.body.domain),
-        ...response,
-      }
-
-      const newDomain = new Domain({
-        ...data
-      })
-
-      newDomain.save((error, response) => {
-        if (error) console.error('Error inserting domain in database: \n%s'.red, error)
-
-        else console.error('%s inserted in database!'.green, req.body.domain)
-      })
-
-      console.log('Generated results for %s'.green, req.body.domain)
-      return res
-        .status(200)
-        .send(data)
-    });
 })
 
 module.exports = router
