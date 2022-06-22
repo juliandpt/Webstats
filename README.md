@@ -1,6 +1,6 @@
 # Webstats
 
-*Webstats is a web service responsible for collecting relevant information from the .*
+*Webstats is a web service responsible for analyzing the security implemented in the different endpoints of any web domain.*
 
 ## Frontend
 
@@ -79,6 +79,7 @@ npm run generate
 - [Nuxt](https://nuxtjs.org) - The web framework used
 - [Vuetify](https://vuetifyjs.com/) - Web style library
 - [Axios](https://www.npmjs.com/package/axios) - Promise based HTTP client
+- [Vue-echarts](https://www.npmjs.com/package/vue-echarts) - Apacge Echarts chart package optimized for Vue
 
 ## Backend
 

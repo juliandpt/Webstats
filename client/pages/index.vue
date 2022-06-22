@@ -19,7 +19,7 @@
           :class="$vuetify.breakpoint.xs ? 'text-center mt-8' : 'mt-8'"
         >
           <p>
-            Descubra la herramienta de dominios más sofisticada y fácil de usar del mundo
+            Analisis la seguridad de un dominio en base a pruebas end to end
           </p>
         </div>
 
