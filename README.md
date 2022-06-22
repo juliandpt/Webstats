@@ -31,10 +31,11 @@ during the installation of the nuxt project.
 npm install axios
 ```
 
-*Axios installation:*
+*Vue-echarts installation:*
 
 ```sh
-npm install axios
+npm install echarts
+npm install vue-echarts
 ```
 
 ### Environment configuration ⚙️
